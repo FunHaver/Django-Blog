@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>My Blog Index</title>
+  </head>
+  <body>
+	{% if latest_post_list %}
+	    <ul>
+	        {% for post in latest_post_list %}
+		<li><a href="{% url 'blog:detail' post.post_title %}">{{post.post_title}}</a></li>
+		{% endfor %}
+	    </ul>
+	{% else %}
+		<p>No posts are available</p>
+	{% endif %}
+  </body>
+</html>
+
