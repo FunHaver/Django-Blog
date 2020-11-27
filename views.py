@@ -1,21 +1,21 @@
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+from django.views import generic
 
 from .models import Post
 # Create your views here.
 
-def index(request):
-    latest_post_list = Post.objects.order_by('-pub_date')[:5]
-    context = {
-        'latest_post_list': latest_post_list,
-    }
+class IndexView(generic.ListView):
+    template_name = 'blog/index.html'
+    context_object_name = 'latest_post_list'
 
-    return render(request, 'blog/index.html', context)
+    def get_queryset(self):
+        """Return the last five published BLOGS"""
+        return Post.objects.order_by('-pub_date')[:5]
 
-def detail(request, post_title_url):
-    post = get_object_or_404(Post, post_title=post_title_url)
-    
-    context = {
-        'post': post,
-    }
-    
-    return render(request, 'blog/detail.html', context)
+class DetailView(generic.DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
+
+    #Assigns the blog.post_url field to match agaist slug passed in url
+    slug_field = 'post_url'
