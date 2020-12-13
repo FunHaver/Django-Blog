@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {% load static %}
     <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>My Blog Index</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/style.css' %}">
   </head>
   <body>
 	{% if latest_post_list %}
