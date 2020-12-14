@@ -10,7 +10,10 @@
 	<br>
 	<p>By {{post.author.first_name}} {{post.author.last_name}}</p>
 	<p>Published on {{post.pub_date}}</p>
-	<section>{{ post.post_body }}</section>
+	<div>
+		{% load blog_extras %}
+		{{ post.post_body | sift_html }}
+	</div>
   </body>
 </html>
 
