@@ -111,8 +111,8 @@ class PostDetailViewTests(TestCase):
 
     def test_published_date(self):
         """The post detail page contains a published date"""
-        create_post(post_title="Testing Published Date", post_body="Testing published date", days=-1, url="testing-published-date")
-        pub_time = timezone.now() + datetime.timedelta(days=-1)
+        create_post(post_title="Testing Published Date", post_body="Testing published date it should be one day less than today", days=-1, url="testing-published-date")
+        pub_time = timezone.localtime(timezone.now()) + datetime.timedelta(days=-1)
         response = self.client.get(reverse("blog:detail", args=["testing-published-date"]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, pub_time.strftime("%b. %-d, %Y"))
