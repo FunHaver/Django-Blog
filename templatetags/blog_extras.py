@@ -27,11 +27,15 @@ def sift_html(text, autoescape=True):
             return "<"
         elif escaped_text_str == "&gt;":
             return ">"
+        elif escaped_text_str == "&quot;":
+            return '"'
         else:
             return "Error: Could not escape " + escaped_text_str
+
     def html_tag_detect(escaped_text_str):
-        
         if escaped_text_str[0] in permitted_tags and escaped_char_decode(escaped_text_str[1:5]) == ">":
+            return True
+        elif escaped_text_str[0] in permitted_tags and escaped_text_str[:2] == "a ":
             return True
         elif escaped_text_str[0] == "/":
             if escaped_text_str[1] in permitted_tags and escaped_char_decode(escaped_text_str[2:6]) == ">":
@@ -39,18 +43,30 @@ def sift_html(text, autoescape=True):
         else:
             return False
 
+    def detect_escaped_html_character_length(escaped_char_str):
+        
+        if escaped_char_str[0] == "&":
+             
+            if escaped_char_str[3] == ";":
+                return 4
+            elif escaped_char_str[5] == ";":
+                return 6
+            else:
+                return 0
+        else:
+            return 0
+
     def selective_unescape(escaped_text):
         finished_text = ""
-        x = 0
+        x = 0 
         unescape_permitted = False 
         while x < len(escaped_text):
             unescaped_char = ""
 
-            
-            if escaped_text[x] == "&" and escaped_text[x+3] == ";":
-                
+            escaped_html_character_length = detect_escaped_html_character_length(escaped_text[x:x+6])
+            if escaped_html_character_length != 0:
                 #Detect which HTML encoded escaped character
-                unescaped_char = escaped_char_decode(escaped_text[x:x+4])
+                unescaped_char = escaped_char_decode(escaped_text[x:x+escaped_html_character_length])
                 
                 #Searches forward in string for type of HTML tag
                 #Returns true if tag exists in permitted_tags
@@ -66,6 +82,10 @@ def sift_html(text, autoescape=True):
                     else:
                         finished_text = finished_text + escaped_text[x]
                         x += 1
+                elif unescaped_char == '"' and unescape_permitted:
+                    x += 6
+                    finished_text = finished_text + unescaped_char
+
                 elif unescaped_char == ">" and unescape_permitted:
                     x += 4
                     finished_text = finished_text + unescaped_char
