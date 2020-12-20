@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    {% load static %}
-    <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+{% include "./header.html" %}
     <title>My Blog Index</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'blog/style.css' %}">
   </head>
   <body>
+	{% include "./menu.html" %}
 	{% if latest_post_list %}
+		<div>
+			{% load blog_extras %}
+			<h1>{{ latest_post_list.0.post_title }}</h1>
+			<div>{{ latest_post_list.0.post_body | sift_html }}</div>
+		</div>
 	    <ul>
 	        {% for post in latest_post_list %}
 		<li><a href="{% url 'blog:detail' post.post_url %}">{{post.post_title}}</a></li>
