@@ -1,3 +1,49 @@
-li a {
-	color: green;
+/*Site wide & Element Wide Styling*/
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+	margin: 0;
+}
+
+/*Nav menu*/
+
+.blog-nav-menu {
+	display: flex;
+	justify-content: space-between;
+	background-color: #5DB7DE;
+	margin: 0;
+	padding: 5px 20px;
+}
+
+.blog-title {
+	display: block;
+	font-size: 2em;
+	color: #F1E9DB
+}
+
+.blog-menu-list {
+	display: flex;
+	margin: 0;
+	padding: 0;
+	align-items: center;
+}
+
+.blog-menu-item {
+	display: inline-block;
+	margin-right: 5px;
+	padding: 5px;
+	font-size: 1.25em;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.blog-menu-item a {
+	text-decoration: none;
+	padding: 8px 5px;
+	color: #F1E9DB;
 }

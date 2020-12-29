@@ -1,22 +1,29 @@
 {% include "./header.html" %}
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'blog/index.css' %}">
     <title>My Blog Index</title>
   </head>
   <body>
 	{% include "./menu.html" %}
+	<div class="index-page-layout">
 	{% if latest_post_list %}
-		<div>
+		<div class="newest-post">
 			{% load blog_extras %}
 			<h1>{{ latest_post_list.0.post_title }}</h1>
 			<div>{{ latest_post_list.0.post_body | sift_html }}</div>
 		</div>
-	    <ul>
-	        {% for post in latest_post_list %}
-		<li><a href="{% url 'blog:detail' post.post_url %}">{{post.post_title}}</a></li>
-		{% endfor %}
-	    </ul>
+		<div class="post-list-sidebar">
+			<h2>Recent Posts</h2>
+			<ul>
+				{% for post in latest_post_list %}
+				<li><a href="{% url 'blog:detail' post.post_url %}">{{post.post_title}}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
 	{% else %}
 		<p>No posts are available.</p>
 	{% endif %}
+	</div>
   </body>
 </html>
 
