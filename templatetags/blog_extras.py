@@ -10,7 +10,7 @@ def sift_html(text, autoescape=True):
     Unescapes designated html tags after django's escaping has passed over
     the text.
     """
-    permitted_tags = ('i', 'b', 'a')
+    permitted_tags = ('i', 'b', 'a', 'br')
 
     #Tests for autoescape and assigns either conditional_escape function or
     #do nothing function depending on whether autoescape has been performed by
@@ -32,16 +32,21 @@ def sift_html(text, autoescape=True):
         else:
             return "Error: Could not escape " + escaped_text_str
 
-    def html_tag_detect(escaped_text_str):
-        if escaped_text_str[0] in permitted_tags and escaped_char_decode(escaped_text_str[1:5]) == ">":
+    def html_tag_permitted(tag_str):
+        full_tag_name = ""
+        x = 0
+        if tag_str[0] == "/":
             return True
-        elif escaped_text_str[0] in permitted_tags and escaped_text_str[:2] == "a ":
-            return True
-        elif escaped_text_str[0] == "/":
-            if escaped_text_str[1] in permitted_tags and escaped_char_decode(escaped_text_str[2:6]) == ">":
-                return True
-        else:
-            return False
+        while x < len(tag_str):
+            if tag_str[x] == " " or tag_str[x:x+4] == "&lt;" or tag_str[x:x+4] == "&gt;":
+                print(tag_str[x])
+                if full_tag_name in permitted_tags:
+                    return True
+                else:
+                    return False
+            else:
+                full_tag_name += tag_str[x]
+                x+=1
 
     def detect_escaped_html_character_length(escaped_char_str):
         
@@ -74,7 +79,7 @@ def sift_html(text, autoescape=True):
                 #if it is a permitted but malformed tag
 
                 if unescaped_char == "<":
-                    unescape_permitted = html_tag_detect(escaped_text[x+4:])
+                    unescape_permitted = html_tag_permitted(escaped_text[x+4:])
 
                     if unescape_permitted:
                         x += 4
@@ -101,3 +106,22 @@ def sift_html(text, autoescape=True):
         return finished_text
 
     return mark_safe(selective_unescape(esc(text)))
+
+@register.filter(needs_autoescape=True)
+def carriage_return_to_break_tag(text, autoescape=True):
+    if autoescape:
+        esc = conditional_escape
+    else:
+        esc = lambda x: x
+
+    processed_text = ""
+    x = 0
+    while x < len(text):
+        print(text[x:x+2])
+        if text[x] == chr(10) or text[x] == chr(13):
+            processed_text += "<br>"
+        else:
+            processed_text += text[x]
+        x += 1
+    
+    return processed_text

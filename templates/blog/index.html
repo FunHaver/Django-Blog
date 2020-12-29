@@ -10,7 +10,7 @@
 		<div class="newest-post">
 			{% load blog_extras %}
 			<h1>{{ latest_post_list.0.post_title }}</h1>
-			<div>{{ latest_post_list.0.post_body | sift_html }}</div>
+			<div>{{ latest_post_list.0.post_body | carriage_return_to_break_tag | sift_html }}</div>
 		</div>
 		<div class="post-list-sidebar">
 			<h2>Recent Posts</h2>

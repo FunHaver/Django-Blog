@@ -12,7 +12,7 @@
 	<p>Published on {{post.pub_date}}</p>
 	<div>
 		{% load blog_extras %}
-		{{ post.post_body | sift_html }}
+		{{ post.post_body | carriage_return_to_break_tag | sift_html }}
 	</div>
   </body>
 </html>
