@@ -41,6 +41,13 @@ class SiftHTMLTestCase(TestCase):
         self.assertContains(response, '<a href="https://example.com">')
         self.assertContains(response, "</a>")
 
+    def test_br_tag_unescaped(self):
+        """br tag uses non-escaped representation"""
+        br_post = post_factory("Paragraph<br>Paragraph Two", "", "br")
+        response = self.client.get(reverse("blog:detail", args=[br_post.post_url]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "<br>")
+
     def test_script_tag_remains_escaped(self):
         """Script tag remains in escaped representation"""
         script_post = post_factory("<script>", "</script>", "script")
@@ -58,3 +65,12 @@ class SiftHTMLTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "&lt;script&gt;")
         self.assertContains(response, "&lt;/script&gt;")
+
+class CarriageReturnToBreakTestCase(TestCase):
+    def test_backslash_n(self):
+        """Newline character is replaced with break tag"""
+        newline_post = post_factory("\\n", "\\n", "newline")
+
+        response = self.client.get(reverse("blog:detail", args=[newline_post.post_url]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "<br>")

@@ -35,11 +35,12 @@ def sift_html(text, autoescape=True):
     def html_tag_permitted(tag_str):
         full_tag_name = ""
         x = 0
+        
+        #  Allows for the name char accumulation to occur if closing tag is being read
         if tag_str[0] == "/":
-            return True
+            x += 1
         while x < len(tag_str):
             if tag_str[x] == " " or tag_str[x:x+4] == "&lt;" or tag_str[x:x+4] == "&gt;":
-                print(tag_str[x])
                 if full_tag_name in permitted_tags:
                     return True
                 else:
@@ -110,14 +111,13 @@ def sift_html(text, autoescape=True):
 @register.filter(needs_autoescape=True)
 def carriage_return_to_break_tag(text, autoescape=True):
     if autoescape:
-        esc = conditional_escape
+        esc = conditional_escape # pylint: disable=unused-variable
     else:
         esc = lambda x: x
 
     processed_text = ""
     x = 0
     while x < len(text):
-        print(text[x:x+2])
         if text[x] == chr(10) or text[x] == chr(13):
             processed_text += "<br>"
         else:
