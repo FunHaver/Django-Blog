@@ -120,8 +120,10 @@ def carriage_return_to_break_tag(text, autoescape=True):
     while x < len(text):
         if text[x] == chr(10) or text[x] == chr(13):
             processed_text += "<br>"
+            x += 2
         else:
             processed_text += text[x]
-        x += 1
+            x += 1
+        
     
     return processed_text

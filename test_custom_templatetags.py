@@ -67,10 +67,20 @@ class SiftHTMLTestCase(TestCase):
         self.assertContains(response, "&lt;/script&gt;")
 
 class CarriageReturnToBreakTestCase(TestCase):
-    def test_backslash_n(self):
-        """Newline character is replaced with break tag"""
-        newline_post = post_factory("\\n", "\\n", "newline")
+    def test_backslash_n_creates_br(self):
+        """1 Newline character is replaced with 1 break tag"""
+        newline_post = post_factory(chr(10), "", "newline")
 
         response = self.client.get(reverse("blog:detail", args=[newline_post.post_url]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "<br>")
+        self.assertEqual(str(response.content).count("<br>"), 1)
+
+    def test_backslash_r_creates_br(self):
+        """1 Newline character is replaced with 1 break tag"""
+        newline_post = post_factory(chr(13), "", "register")
+
+        response = self.client.get(reverse("blog:detail", args=[newline_post.post_url]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "<br>")
+        self.assertEqual(str(response.content).count("<br>"), 1)
