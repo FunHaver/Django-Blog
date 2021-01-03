@@ -8,9 +8,15 @@ register = template.Library()
 def sift_html(text, autoescape=True):
     """
     Unescapes designated html tags after django's escaping has passed over
-    the text.
+    the text. This supports images, so be careful about the image origin
     """
-    permitted_tags = ('i', 'b', 'a', 'br')
+    permitted_tags = (
+        'i', 'b', 'a', 
+        'br', 
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'code',
+        'img'
+    )
 
     #Tests for autoescape and assigns either conditional_escape function or
     #do nothing function depending on whether autoescape has been performed by
