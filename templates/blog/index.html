@@ -1,10 +1,10 @@
-{% include "./header.html" %}
+{% include "base/header.html" %}
 	{% load static %}
 	<link rel="stylesheet" type="text/css" href="{% static 'blog/index.css' %}">
     <title>My Blog Index</title>
   </head>
   <body>
-	{% include "./menu.html" %}
+	{% include "base/menu.html" %}
 	<div class="index-page-layout">
 	{% if latest_post_list %}
 		<div class="newest-post">
