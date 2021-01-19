@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+{% include "base/header.html" %}
+	{% load static %}
   <title>{{ post.post_title }}</title>
   </head>
   <body>
+    {% include "base/menu.html" %}
 	<h1>{{ post.post_title }}</h1>
 	<p>By {{post.author.first_name}} {{post.author.last_name}}</p>
 	<p>Published on {{post.pub_date}}</p>
